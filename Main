@@ -556,6 +556,12 @@ function Library:CreateWindow(Title, Settings)
             ZIndex = 101,
         });
 
+        if #Library.CreatedTabs == 0 then
+            TabFrame.Visible = true;
+        else
+            TabFrame.Visible = false;
+        end;
+
         local TabScrolling = Library:Create("ScrollingFrame", {
             Parent = TabFrame,
             BackgroundTransparency = 1,
