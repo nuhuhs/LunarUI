@@ -378,6 +378,7 @@ function UpdateColors()
 end;
 
 function Library:CreateWindow(Title, Settings)
+    local Window = {};
     local Title, Settings = Title or "LunarUI", Settings or {};
 
     local ScreenUI = Library:Create("ScreenGui", { Parent = CoreGui, ZIndexBehavior = Enum.ZIndexBehavior.Global });
@@ -539,7 +540,7 @@ function Library:CreateWindow(Title, Settings)
 
     RunService.Heartbeat:Connect(UpdateColors);
 
-    function Library:CreateTab(Title, Settings)
+    function Window:CreateTab(Title, Settings)
         local Title = Title or "Tab";
         local Tab, Settings = {}, Settings or {};
         local LayoutOrder = Settings.LayoutOrder or 0;
@@ -1548,7 +1549,7 @@ function Library:CreateWindow(Title, Settings)
 
                 function Dropdown:SetValue(val)
                     if val then
-                        if Multi then
+                        if multi then
                             if typeof(val) == 'table' then
                                 Current = val;
                             else
@@ -1556,13 +1557,13 @@ function Library:CreateWindow(Title, Settings)
                             end;
                         else
                             if typeof(val) == 'table' then
-                                warn(Flag .. " ISN'T MULTI")
+                                warn(flag .. " ISN'T MULTI")
                                 val = unpack(val);
                             end;
 
                             Current = val;
                         end;
-                        Update();
+                        UpdateList();
                     end;
                 end;
 
@@ -1594,7 +1595,7 @@ function Library:CreateWindow(Title, Settings)
         return Tab;
     end;
 
-    return Library
+    return Window;
 end;
 
 return Library;
