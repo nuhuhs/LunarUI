@@ -1595,5 +1595,4 @@ function Library:CreateWindow(Title, Settings)
     end;
 end;
 
-
-    return Library;
+return Library;
