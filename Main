@@ -1,3 +1,5 @@
+-- https://raw.githubusercontent.com/nuhuhs/LunarUI
+
 -- LunarUI
 
 local players = game:GetService("Players");
@@ -44,8 +46,32 @@ local Library = {
     Folder = "../LunarUI",
     SecondaryFolder = "",
     SavePath = "/SaveData",
-    ThemePath = "/ThemeData"
+    ThemePath = "/ThemeData",
+
+    ScreenUI = nil
 };
+
+function Library:Unload()
+    for i, v in pairs(Library.Signals) do
+        v:Disconnect();
+    end;
+
+    for i, v in pairs(Library.Toggles) do
+        v:Destroy();
+    end;
+
+    return;
+end
+
+function Library.Visible(Value)
+    if not Library.ScreenUI then return; end;
+
+    if Value ~= nil then
+        Library.ScreenUI.Enabled = Value;
+    else
+        Library.ScreenUI.Enabled = not ScreenUI.Enabled;
+    end
+end
 
 getgenv().Library = Library;
 
@@ -382,6 +408,7 @@ function Library:CreateWindow(Title, Settings)
     local Title, Settings = Title or "LunarUI", Settings or {};
 
     local ScreenUI = Library:Create("ScreenGui", { Parent = CoreGui, ZIndexBehavior = Enum.ZIndexBehavior.Global });
+    Library.ScreenUI = ScreenUI;
 
     local WindowFrame = Library:Create("ImageLabel", {
         Parent = ScreenUI,
@@ -513,26 +540,6 @@ function Library:CreateWindow(Title, Settings)
 
     Library:Register(WindowClose, { ImageColor3 = "IconColor" });
     Library:Register(WindowTitle, { TextColor3 = "TextColor" });
-
-    function Library:Unload()
-        for i, v in pairs(Library.Signals) do
-            v:Disconnect();
-        end;
-
-        for i, v in pairs(Library.Toggles) do
-            v:Destroy();
-        end;
-
-        return;
-    end
-
-    function Library.Visible(Value)
-        if Value ~= nil then
-            ScreenUI.Enabled = Value;
-        else
-            ScreenUI.Enabled = not ScreenUI.Enabled;
-        end
-    end
 
     WindowClose.MouseButton1Click:Connect(function()
         Library.Visible(false);
