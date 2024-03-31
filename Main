@@ -1593,6 +1593,7 @@ function Library:CreateWindow(Title, Settings)
 
         return Tab;
     end;
+end;
+
 
     return Library;
-end;
