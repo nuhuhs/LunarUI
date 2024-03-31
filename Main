@@ -1548,7 +1548,7 @@ function Library:CreateWindow(Title, Settings)
 
                 function Dropdown:SetValue(val)
                     if val then
-                        if multi then
+                        if Multi then
                             if typeof(val) == 'table' then
                                 Current = val;
                             else
@@ -1556,13 +1556,13 @@ function Library:CreateWindow(Title, Settings)
                             end;
                         else
                             if typeof(val) == 'table' then
-                                warn(flag .. " ISN'T MULTI")
+                                warn(Flag .. " ISN'T MULTI")
                                 val = unpack(val);
                             end;
 
                             Current = val;
                         end;
-                        UpdateList();
+                        Update();
                     end;
                 end;
 
