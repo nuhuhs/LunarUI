@@ -42,14 +42,41 @@ local Library = {
     Signals = {},
     Toggles = {},
     Flags = {},
+    FlagInstances = {},
 
     Folder = "../LunarUI",
     SecondaryFolder = "",
-    SavePath = "/SaveData",
-    ThemePath = "/ThemeData",
+    SavePath = "/SaveData.lua",
+    ThemePath = "/ThemeData.lua",
 
     ScreenUI = nil
 };
+
+function Library:SetFolder(Path, Secondary)
+    if Secondary then
+        Library.SecondaryFolder = "/"..Path;
+    else
+        Library.Folder = "/"..Path;
+    end;
+end;
+
+function Library:Save()
+    local SavePath = Library.Folder..Library.SecondaryFolder..Library.SavePath;
+    local ThemePath = Library.Folder..Library.SecondaryFolder..Library.ThemePath;
+
+    writefile(SavePath, "Library.Flags = "..Library.Flags);
+end;
+
+function Library:LoadSettings()
+    local SavePath = Library.Folder..Library.SecondaryFolder..Library.SavePath;
+    local ThemePath = Library.Folder..Library.SecondaryFolder..Library.ThemePath;
+
+    runfile(SavePath);
+
+    for i, v in next,(Library.FlagInstances) do
+        v:Load();
+    end;
+end;
 
 function Library:Unload()
     for i, v in pairs(Library.Signals) do
@@ -914,6 +941,14 @@ function Library:CreateWindow(Title, Settings)
                     Callback(Toggle.Value);
                 end;
 
+                if Flag then
+                    Library.FlagInstances[Flag] = Toggle;
+                end;
+
+                function Toggle:Load()
+                    Toggle:SetValue(Library.Flags[Flag] or Toggle.Default);
+                end;
+
                 function Toggle:SetText(nText)
                     Text = nText or "";
                     Update();
@@ -1079,6 +1114,14 @@ function Library:CreateWindow(Title, Settings)
                     Update();
                 end;
 
+                if Flag then
+                    Library.FlagInstances[Flag] = Slider;
+                end;
+
+                function Slider:Load()
+                    Slider:SetValue(Library.Flags[Flag] or Slider.Default);
+                end;
+
                 function Slider:SetMax(Value)
                     Slider.Max = Value or 0;
                     Update();
@@ -1190,6 +1233,14 @@ function Library:CreateWindow(Title, Settings)
                     end;
                 end;
 
+                if Flag then
+                    Library.FlagInstances[Flag] = Input;
+                end;
+
+                function Input:Load()
+                    Input:SetInput(Library.Flags[Flag] or Text);
+                end;
+
                 return Input;
             end;
 
@@ -1201,6 +1252,7 @@ function Library:CreateWindow(Title, Settings)
 
                 local Callback = Settings.Callback or function(...) end;
                 local validKeys = Settings.Valid or nil;
+                local Flag = Settings.Flag;
 
                 local KeybindFrame = Library:Create("Frame", {
                     Parent = SectionFrame,
@@ -1286,7 +1338,7 @@ function Library:CreateWindow(Title, Settings)
                 Library:Register(KeybindLabel, { TextColor3 = "TextColor" });
 
                 local recorder;
-                function Keybind.SetKey(key)
+                function Keybind:SetKey(key)
                     pcall(function()
                         if recorder then
                             recorder:Disconnect();
@@ -1297,11 +1349,25 @@ function Library:CreateWindow(Title, Settings)
                             local recorder = Library.RecordPress("KeyCode", { key }, Callback);
                             Keybind.Value = key;
                             KeybindKey.Text = Keybind.Value;
+                            if Flag then
+                                Library.Flags[Flag] = Keybind.Value;
+                            end;
                         else
                             Keybind.Value = key;
                             KeybindKey.Text = tostring(Keybind.Value);
+                            if Flag then
+                                Library.Flags[Flag] = Keybind.Value;
+                            end;
                         end;
                     end);
+                end;
+
+                if Flag then
+                    Library.FlagInstances[Flag] = Keybind;
+                end;
+
+                function Keybind:Load()
+                    Keybind:SetKey(Library.Flags[Flag] or Keybind.Default);
                 end;
 
                 KeybindClick.MouseButton1Click:Connect(function()
@@ -1327,6 +1393,7 @@ function Library:CreateWindow(Title, Settings)
                 local Multi = Settings.Multi or false;
                 local Default = Settings.Default or nil;
                 local Current = Default or nil;
+                local Flag = Settings.Flag;
 
                 if not Multi then
                     if typeof(Default) == "table" then
@@ -1548,6 +1615,10 @@ function Library:CreateWindow(Title, Settings)
 
                     OptionSelected.Text = tostring(currentText);
 
+                    if Flag then
+                        Library.Flags[Flag] = Current;
+                    end;
+
                     Callback(Current);
                 end;
 
@@ -1562,7 +1633,7 @@ function Library:CreateWindow(Title, Settings)
 
                 function Dropdown:SetValue(val)
                     if val then
-                        if multi then
+                        if Multi then
                             if typeof(val) == 'table' then
                                 Current = val;
                             else
@@ -1570,14 +1641,22 @@ function Library:CreateWindow(Title, Settings)
                             end;
                         else
                             if typeof(val) == 'table' then
-                                warn(flag .. " ISN'T MULTI")
+                                warn(Flag .. " ISN'T MULTI")
                                 val = unpack(val);
                             end;
 
                             Current = val;
                         end;
-                        UpdateList();
+                        Update();
                     end;
+                end;
+
+                if Flag then
+                    Library.FlagInstances[Flag] = Dropdown;
+                end;
+
+                function Dropdown:Load()
+                    Dropdown:SetValue(Library.Flags[Flag] or Default);
                 end;
 
                 Update();
