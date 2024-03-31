@@ -245,6 +245,7 @@ local ImpelCheckpoint = 0;
 local AutoImpel = Section:CreateToggle({
     Text = "Auto Impel",
     Default = false,
+    Flag = "AutoImpel_Flag",
 
     Callback = function(Value)
         getgenv().AutoImpel = Value;
@@ -364,6 +365,7 @@ local AutoImpel = Section:CreateToggle({
 local autoRedo = Section:CreateToggle({
     Text = "Auto Redo",
     Default = false,
+    Flag = "autoRedo_Flag",
 
     Callback = function(Value)
         getgenv().autoRedo = Value;
@@ -377,6 +379,7 @@ local SetSpeed = Section:CreateSlider({
     Default = 49,
     Max = 5000,
     Min = 0,
+    Flag = "TweenSpeed_Flag",
 
     Callback = function(Value)
         Storage['TweenSpeed'] = Value;
@@ -386,6 +389,7 @@ local SetSpeed = Section:CreateSlider({
 local AutoSpeed = Section:CreateToggle({
     Text = "Autolimit Speed",
     Default = false,
+    Flag = "AutoSpeed_Flag",
 
     Callback = function(Value)
         getgenv().Autolimit_Speed = Value;
@@ -403,6 +407,8 @@ local SpeedBypasses = Section:CreateDropdown({
     Text = "Speed Bypasses",
     Multi = true,
     Options = { "Geppo", "Dash", "Pika", "Gomu" },
+    Flag = "SpeedBypasses_Flag",
+
     Callback = function(Value)
         getgenv().CurrentBypasses = Value;
     end,
@@ -413,6 +419,7 @@ Section:CreateDivider();
 local FlowerStack = Section:CreateToggle({
     Text = "Stack Flower Sword",
     Default = false,
+    Flag = "FlowerStacker",
 
     Callback = function(Value)
         getgenv().FlowerStack = Value;
@@ -428,6 +435,7 @@ local FlowerStack = Section:CreateToggle({
 local Noclip = Section:CreateToggle({
     Text = 'Toggle Noclip',
     Default = false,
+    Flag = "Plr_Noclip_Flag",
 
     Callback = function(Value)
         getgenv().noclip = Value
