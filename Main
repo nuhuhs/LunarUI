@@ -82,10 +82,6 @@ function Library:LoadSettings()
     runfile(SavePath);
 
     for i, v in next, (Library.FlagInstances) do
-        print(tostring(i) .. " = " .. tostring(v));
-    end;
-
-    for i, v in next, (Library.FlagInstances) do
         v:Load();
     end;
 end;
