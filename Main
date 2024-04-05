@@ -52,9 +52,11 @@ local Library = {
     ScreenUI = nil
 };
 
+getgenv().Library = Library;
+
 function Library:SetFolder(Path, Secondary)
     if Secondary then
-        Library.SecondaryFolder = "//"..Path;
+        Library.SecondaryFolder = "//" .. Path;
     else
         Library.Folder = Path;
     end;
@@ -66,19 +68,19 @@ function Library:Save()
     local saveString = "";
 
     for i, v in next, (Library.Flags) do
-        saveString = saveString .. "Library["..tostring(i) .. "]=" .. tostring(v) .. "; ";
+        saveString = saveString .. "getgenv().Library[" .. tostring(i) .. "]=" .. tostring(v) .. "; ";
     end;
 
     writefile(SavePath, saveString);
 end;
 
 function Library:LoadSettings()
-    local SavePath = Library.Folder..Library.SecondaryFolder..Library.SavePath;
-    local ThemePath = Library.Folder..Library.SecondaryFolder..Library.ThemePath;
+    local SavePath = Library.Folder .. Library.SecondaryFolder .. Library.SavePath;
+    local ThemePath = Library.Folder .. Library.SecondaryFolder .. Library.ThemePath;
 
     runfile(SavePath);
 
-    for i, v in next,(Library.FlagInstances) do
+    for i, v in next, (Library.FlagInstances) do
         v:Load();
     end;
 end;
@@ -104,8 +106,6 @@ function Library.Visible(Value)
         Library.ScreenUI.Enabled = not ScreenUI.Enabled;
     end
 end
-
-getgenv().Library = Library;
 
 local function AutoSize(object, padding)
     if not object then return; end;
@@ -1704,4 +1704,4 @@ function Library:CreateWindow(Title, Settings)
     return Window;
 end;
 
-return Library; 
+return Library;
