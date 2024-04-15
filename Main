@@ -96,7 +96,7 @@ function Library:Unload()
 
     Library.ScreenUI:Destroy();
     Library = nil;
-    
+
     return;
 end
 
@@ -1311,7 +1311,7 @@ function Library:CreateWindow(Title, Settings)
                     BorderSizePixel = 0,
                     AnchorPoint = Vector2.new(.5, .5),
                     Position = UDim2.new(.5, 0, .5, 0),
-                    Size = UDim2.new(.98, 0, .98, 0),
+                    Size = UDim2.new(.94, 0, .98, 0),
                     ZIndex = 106,
                     Font = Library.Font,
                     Text = tostring(Keybind.Value),
