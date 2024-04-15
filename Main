@@ -950,7 +950,6 @@ function Library:CreateWindow(Title, Settings)
                     Toggle.Value = Value or false;
 
                     Callback(Toggle.Value);
-                    task.wait();
                     Update();
                 end;
 
@@ -960,6 +959,7 @@ function Library:CreateWindow(Title, Settings)
 
                 function Toggle:Load()
                     Toggle:SetValue(Library.Flags[Flag] or Toggle.Default);
+                    Update();
                 end;
 
                 function Toggle:SetText(nText)
@@ -976,10 +976,6 @@ function Library:CreateWindow(Title, Settings)
                     Toggle = nil;
                     Library.Toggles[Idx] = nil;
                 end;
-
-                if Library.Flags[Flag] == "boolean" then
-                    Toggle:SetValue(Library.Flags[Flag])
-                end
 
                 ToggleClick.MouseButton1Click:Connect(Toggle.Fire);
 
@@ -1136,6 +1132,7 @@ function Library:CreateWindow(Title, Settings)
 
                 function Slider:Load()
                     Slider:SetValue(Library.Flags[Flag] or Slider.Default, true);
+                    Update(noFlag);
                 end;
 
                 function Slider:SetMax(Value)
