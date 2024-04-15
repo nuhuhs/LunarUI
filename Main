@@ -103,7 +103,7 @@ function Library.Visible(Value)
     if Value ~= nil then
         Library.ScreenUI.Enabled = Value;
     else
-        Library.ScreenUI.Enabled = not ScreenUI.Enabled;
+        Library.ScreenUI.Enabled = not Library.ScreenUI.Enabled;
     end
 end
 
@@ -1381,8 +1381,10 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 KeybindClick.MouseButton1Click:Connect(function()
-                    local recieved = Library.RecordPress("KeyCode", validKeys,
-                        function(response) Keybind:SetKey(response); end, true);
+                    local recieved = Library.RecordPress("KeyCode", validKeys, function (response)
+                        print(response)
+                    end, true);
+
                     KeybindKey.Text = "..."
                 end);
 
