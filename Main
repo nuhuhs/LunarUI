@@ -945,11 +945,14 @@ function Library:CreateWindow(Title, Settings)
                     Callback(Toggle.Value);
                 end;
 
-                function Toggle:SetValue(Value)
+                function Toggle:SetValue(Value, noFlag)
                     Toggle.Value = Value or false;
 
-                    Update();
                     Callback(Toggle.Value);
+
+                    if not noFlag then
+                        Update();
+                    end;
                 end;
 
                 if Flag then
@@ -1099,7 +1102,7 @@ function Library:CreateWindow(Title, Settings)
 
                 local Callback = Settings.Callback or function(...) end;
 
-                local function Update()
+                local function Update(noFlag)
                     local percent = math.clamp((Slider.Value - Slider.Min) / (Slider.Max - Slider.Min), 0, 1);
                     Slider.Value = math.clamp(Slider.Value, Slider.Min, Slider.Max);
 
@@ -1114,18 +1117,17 @@ function Library:CreateWindow(Title, Settings)
                     end
 
                     Callback(Slider.Value);
-                    if Flag then
+                    if Flag and not noFlag then
                         Library.Flags[Flag] = Slider.Value;
+                        Library:Save();
                     end;
-
-                    Library:Save();
                 end;
 
-                function Slider:SetValue(Value)
+                function Slider:SetValue(Value, noFlag)
                     Slider.Value = math.clamp(Value, Slider.Min, Slider.Max) or 0;
 
                     Callback(Slider.Value);
-                    Update();
+                    Update(noFlag);
                 end;
 
                 if Flag then
@@ -1133,7 +1135,7 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 function Slider:Load()
-                    Slider:SetValue(Library.Flags[Flag] or Slider.Default);
+                    Slider:SetValue(Library.Flags[Flag] or Slider.Default, true);
                 end;
 
                 function Slider:SetMax(Value)
