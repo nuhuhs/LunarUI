@@ -1348,7 +1348,9 @@ function Library:CreateWindow(Title, Settings)
                 Library:Register(KeybindLabel, { TextColor3 = "TextColor" });
 
                 local recorder;
-                function Keybind:SetKey(key)
+                function Keybind:SetKey(key, next)
+                    print(key)
+                    print(next)
                     if recorder then
                         recorder:Disconnect();
                         recorder = nil;
@@ -1381,9 +1383,7 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 KeybindClick.MouseButton1Click:Connect(function()
-                    local recieved = Library.RecordPress("KeyCode", validKeys, function (response)
-                        print(response)
-                    end, true);
+                    local recieved = Library.RecordPress("KeyCode", validKeys, Keybind.SetKey, true);
 
                     KeybindKey.Text = "..."
                 end);
