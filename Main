@@ -68,13 +68,14 @@ function Library:Save()
     local saveString = "";
 
     for i, v in next, (Library.Flags) do
-        print(i)
         if typeof(v) == 'string' then
             v = "'" .. v .. "'";
         end;
 
         saveString = saveString .. "getgenv().Library['Flags']['" .. tostring(i) .. "']=" .. tostring(v) .. "; ";
     end;
+
+    print(saveString);
 
     writefile(SavePath, saveString);
 end;
