@@ -949,8 +949,8 @@ function Library:CreateWindow(Title, Settings)
                 function Toggle:SetValue(Value)
                     Toggle.Value = Value or false;
 
-                    Callback(Toggle.Value);
                     Update();
+                    Callback(Toggle.Value);
                 end;
 
                 if Flag then
@@ -1119,11 +1119,11 @@ function Library:CreateWindow(Title, Settings)
                     Callback(Slider.Value);
                 end;
 
-                function Slider:SetValue(Value, noFlag)
+                function Slider:SetValue(Value)
                     Slider.Value = math.clamp(Value, Slider.Min, Slider.Max) or 0;
 
                     Callback(Slider.Value);
-                    Update(noFlag);
+                    Update();
                 end;
 
                 if Flag then
@@ -1131,8 +1131,8 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 function Slider:Load()
-                    Slider:SetValue(Library.Flags[Flag] or Slider.Default, true);
-                    Update(noFlag);
+                    Slider:SetValue(Library.Flags[Flag] or Slider.Default);
+                    Update(true);
                 end;
 
                 function Slider:SetMax(Value)
