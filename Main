@@ -246,6 +246,7 @@ do -- LOAD KEY RECORDER
                             InputRecord:Disconnect();
                         end
                         received = tostring(input.KeyCode.Name);
+                        print(received)
                         callback(received);
                         return received;
                     end
@@ -1348,9 +1349,7 @@ function Library:CreateWindow(Title, Settings)
                 Library:Register(KeybindLabel, { TextColor3 = "TextColor" });
 
                 local recorder;
-                function Keybind:SetKey(key, next)
-                    print(key)
-                    print(next)
+                function Keybind:SetKey(key)
                     if recorder then
                         recorder:Disconnect();
                         recorder = nil;
@@ -1383,7 +1382,10 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 KeybindClick.MouseButton1Click:Connect(function()
-                    local recieved = Library.RecordPress("KeyCode", validKeys, Keybind.SetKey, true);
+                    local recieved = Library.RecordPress("KeyCode", validKeys, function(Key)
+                        print(Key);
+                        Keybind:SetKey(Key);
+                    end, true);
 
                     KeybindKey.Text = "..."
                 end);
