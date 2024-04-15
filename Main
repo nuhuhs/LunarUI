@@ -1119,10 +1119,9 @@ function Library:CreateWindow(Title, Settings)
                     Callback(Slider.Value);
                 end;
 
-                function Slider:SetValue(Value)
+                function Slider:SetValue(Value, noFlag)
                     Slider.Value = math.clamp(Value, Slider.Min, Slider.Max) or 0;
 
-                    Callback(Slider.Value);
                     Update();
                 end;
 
@@ -1131,8 +1130,7 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 function Slider:Load()
-                    Slider:SetValue(Library.Flags[Flag] or Slider.Default);
-                    Update(true);
+                    Slider:SetValue(Library.Flags[Flag] or Slider.Default, true);
                 end;
 
                 function Slider:SetMax(Value)
