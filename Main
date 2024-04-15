@@ -172,15 +172,11 @@ do -- LOAD KEY RECORDER
                     pressed = tostring(input.UserInputType.Name);
                 end
 
-                print(pressed);
-                print(table.concat(validInputs, "; "));
-
-                if (table.find(validInputs, string.lower(pressed))) or (table.find(validInputs, string.upper(pressed))) then
+                if (table.find(validInputs, pressed)) or (table.find(validInputs, string.lower(pressed))) or (table.find(validInputs, string.upper(pressed))) then
                     if breakOnRecord then
                         InputRecord:Disconnect();
                     end
                     received = pressed;
-                    print(callback);
                     callback(received);
                 end
             else
