@@ -75,8 +75,6 @@ function Library:Save()
         saveString = saveString .. "getgenv().Library['Flags']['" .. tostring(i) .. "']=" .. tostring(v) .. "; ";
     end;
 
-    print(saveString);
-
     writefile(SavePath, saveString);
 end;
 
@@ -84,7 +82,6 @@ function Library:LoadSettings()
     local SavePath = Library.Folder .. Library.SecondaryFolder .. Library.SavePath;
     local ThemePath = Library.Folder .. Library.SecondaryFolder .. Library.ThemePath;
 
-    print(readfile(SavePath));
     runfile(SavePath);
 
     for i, v in next, (Library.FlagInstances) do
