@@ -187,6 +187,7 @@ do -- LOAD KEY RECORDER
                             InputRecord:Disconnect();
                         end
                         received = tostring(input.KeyCode.Name);
+                        print(received)
                         callback(received);
                         return received;
                     end
@@ -1354,8 +1355,6 @@ function Library:CreateWindow(Title, Settings)
                         recorder = nil;
                     end;
 
-                    print(key)
-
                     if key and Enum.KeyCode[key] then
                         recorder = Library.RecordPress("KeyCode", { key }, Callback);
                         Keybind.Value = key;
@@ -1386,7 +1385,9 @@ function Library:CreateWindow(Title, Settings)
                     local recieved = Library.RecordPress("KeyCode", validKeys, Keybind.SetKey, true);
 
                     KeybindKey.Text = "..."
-                end)
+                end);
+
+                Keybind:SetKey(Keybind.Default);
 
                 return Keybind;
             end;
