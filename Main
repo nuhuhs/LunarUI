@@ -1152,7 +1152,7 @@ function Library:CreateWindow(Title, Settings)
                     Update();
                 end;
 
-                Update();
+                Update(true);
 
                 SliderClick.MouseButton1Down:Connect(function()
                     while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
