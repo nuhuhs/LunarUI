@@ -94,6 +94,9 @@ function Library:Unload()
         v:Destroy();
     end;
 
+    Library.ScreenUI:Destroy();
+    Library = nil;
+    
     return;
 end
 
