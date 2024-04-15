@@ -1349,29 +1349,29 @@ function Library:CreateWindow(Title, Settings)
 
                 local recorder;
                 function Keybind:SetKey(key)
-                    pcall(function()
-                        if recorder then
-                            recorder:Disconnect();
-                            recorder = nil;
-                        end;
+                    if recorder then
+                        recorder:Disconnect();
+                        recorder = nil;
+                    end;
 
-                        if key and Enum.KeyCode[key] then
-                            local recorder = Library.RecordPress("KeyCode", { key }, Callback);
-                            Keybind.Value = key;
-                            KeybindKey.Text = Keybind.Value;
-                            if Flag then
-                                Library.Flags[Flag] = Keybind.Value;
-                            end;
-                            Library:Save();
-                        else
-                            Keybind.Value = key;
-                            KeybindKey.Text = tostring(Keybind.Value);
-                            if Flag then
-                                Library.Flags[Flag] = Keybind.Value;
-                            end;
-                            Library:Save();
+                    print(key)
+
+                    if key and Enum.KeyCode[key] then
+                        recorder = Library.RecordPress("KeyCode", { key }, Callback);
+                        Keybind.Value = key;
+                        KeybindKey.Text = Keybind.Value;
+                        if Flag then
+                            Library.Flags[Flag] = Keybind.Value;
                         end;
-                    end);
+                        Library:Save();
+                    else
+                        Keybind.Value = key;
+                        KeybindKey.Text = tostring(Keybind.Value);
+                        if Flag then
+                            Library.Flags[Flag] = Keybind.Value;
+                        end;
+                        Library:Save();
+                    end;
                 end;
 
                 if Flag then
