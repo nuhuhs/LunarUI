@@ -1355,7 +1355,7 @@ function Library:CreateWindow(Title, Settings)
                 Library:Register(KeybindLabel, { TextColor3 = "TextColor" });
 
                 local recorder;
-                function Keybind:SetKey(key)
+                function Keybind:SetKey(key, noFlag)
                     if recorder then
                         recorder:Disconnect();
                         recorder = nil;
@@ -1365,17 +1365,17 @@ function Library:CreateWindow(Title, Settings)
                         recorder = Library.RecordPress("KeyCode", { key }, Callback);
                         Keybind.Value = key;
                         KeybindKey.Text = Keybind.Value;
-                        if Flag then
+                        if Flag and not noFlag then
                             Library.Flags[Flag] = tostring(Keybind.Value);
+                            Library:Save();
                         end;
-                        Library:Save();
                     else
                         Keybind.Value = key;
                         KeybindKey.Text = tostring(Keybind.Value);
-                        if Flag then
+                        if Flag and not noFlag then
                             Library.Flags[Flag] = tostring(Keybind.Value);
+                            Library:Save();
                         end;
-                        Library:Save();
                     end;
                 end;
 
@@ -1395,7 +1395,7 @@ function Library:CreateWindow(Title, Settings)
                     KeybindKey.Text = "..."
                 end);
 
-                Keybind:SetKey(Keybind.Default);
+                Keybind:SetKey(Keybind.Default, true);
 
                 return Keybind;
             end;
