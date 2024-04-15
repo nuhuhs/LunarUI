@@ -945,14 +945,11 @@ function Library:CreateWindow(Title, Settings)
                     Callback(Toggle.Value);
                 end;
 
-                function Toggle:SetValue(Value, noFlag)
+                function Toggle:SetValue(Value)
                     Toggle.Value = Value or false;
 
                     Callback(Toggle.Value);
-
-                    if not noFlag then
-                        Update();
-                    end;
+                    Update();
                 end;
 
                 if Flag then
