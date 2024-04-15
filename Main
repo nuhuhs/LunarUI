@@ -86,6 +86,7 @@ function Library:LoadSettings()
     runfile(SavePath);
 
     for i, v in next, (Library.FlagInstances) do
+        print(i)
         v:Load();
     end;
 end;
@@ -1125,13 +1126,13 @@ function Library:CreateWindow(Title, Settings)
                     Update(noFlag);
                 end;
 
+                if Flag then
+                    Library.FlagInstances[Flag] = Slider;
+                end;
+
                 function Slider:Load()
                     print("Slider:"..Library.Flags[Flag]);
                     Slider:SetValue(Library.Flags[Flag] or Slider.Default, true);
-                end;
-
-                if Flag then
-                    Library.FlagInstances[Flag] = Slider;
                 end;
 
                 function Slider:SetMax(Value)
