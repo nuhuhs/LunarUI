@@ -85,6 +85,8 @@ function Library:LoadSettings()
     print(readfile(SavePath));
     runfile(SavePath);
 
+    repeat wait(); until #Library.FlagInstances == #Library.Flags;
+
     for i, v in next, (Library.FlagInstances) do
         v:Load();
     end;
@@ -1130,7 +1132,8 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 function Slider:Load()
-                    Slider.Value = math.clamp(Library.Flags[Flag] or Slider.Default, Slider.Min, Slider.Max) or 0;
+                    Slider:SetValue(Library.Flags[Flag] or Slider.Default, true);
+                    task.wait();
                     Update();
                 end;
 
