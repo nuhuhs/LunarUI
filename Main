@@ -68,7 +68,7 @@ function Library:Save()
     local saveString = "";
 
     for i, v in next, (Library.Flags) do
-        saveString = saveString .. "getgenv().Library['Flag']['" .. tostring(i) .. "']=" .. tostring(v) .. "; ";
+        saveString = saveString .. "getgenv().Library['Flags']['" .. tostring(i) .. "']=" .. tostring(v) .. "; ";
     end;
 
     writefile(SavePath, saveString);
