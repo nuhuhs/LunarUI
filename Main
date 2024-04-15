@@ -969,7 +969,8 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 function Toggle:Destroy()
-                    Toggle:SetValue();
+                    Toggle.Value = Value or false;
+                    Callback(Toggle.Value);
 
                     task.wait();
 
