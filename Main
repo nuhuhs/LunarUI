@@ -950,6 +950,7 @@ function Library:CreateWindow(Title, Settings)
                     Toggle.Value = Value or false;
 
                     Callback(Toggle.Value);
+                    task.wait();
                     Update();
                 end;
 
