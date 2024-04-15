@@ -1365,14 +1365,14 @@ function Library:CreateWindow(Title, Settings)
                         Keybind.Value = key;
                         KeybindKey.Text = Keybind.Value;
                         if Flag then
-                            Library.Flags[Flag] = Keybind.Value;
+                            Library.Flags[Flag] = tostring(Keybind.Value);
                         end;
                         Library:Save();
                     else
                         Keybind.Value = key;
                         KeybindKey.Text = tostring(Keybind.Value);
                         if Flag then
-                            Library.Flags[Flag] = Keybind.Value;
+                            Library.Flags[Flag] = tostring(Keybind.Value);
                         end;
                         Library:Save();
                     end;
