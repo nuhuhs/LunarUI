@@ -1127,14 +1127,12 @@ function Library:CreateWindow(Title, Settings)
                     Update(noFlag);
                 end;
 
-                if Flag then
-                    Library.FlagInstances[Flag] = Slider;
-                end;
-
                 function Slider:Load()
                     Slider:SetValue(Library.Flags[Flag] or Slider.Default, true);
-                    task.wait();
-                    Update();
+                end;
+
+                if Flag then
+                    Library.FlagInstances[Flag] = Slider;
                 end;
 
                 function Slider:SetMax(Value)
