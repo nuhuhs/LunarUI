@@ -1103,8 +1103,6 @@ function Library:CreateWindow(Title, Settings)
 
                     SliderTextBox.Text = math.floor(Slider.Value);
 
-                    if 
-
                     TweenService:Create(SliderInside, TweenInfo.new(.05), { Size = UDim2.new(percent, 0, 1, 0) }):Play();
 
                     if percent <= 0 then
@@ -1128,7 +1126,7 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 function Slider:Load()
-                    print("Slider: "..Library.Flags[Flag]);
+                    print("Slider:"..Library.Flags[Flag]);
                     Slider:SetValue(Library.Flags[Flag] or Slider.Default, true);
                 end;
 
