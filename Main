@@ -178,7 +178,6 @@ do -- LOAD KEY RECORDER
                     end
                     received = pressed;
                     callback(received);
-                    return received;
                 end
             else
                 if inputType == "KeyCode" then
@@ -188,7 +187,6 @@ do -- LOAD KEY RECORDER
                         end
                         received = tostring(input.KeyCode.Name);
                         callback(received);
-                        return received;
                     end
                 else
                     if input.UserInputType and input.KeyCode == Enum.KeyCode.Unknown then
@@ -197,7 +195,6 @@ do -- LOAD KEY RECORDER
                         end
                         received = tostring(input.UserInputType.Name);
                         callback(received);
-                        return received;
                     end
                 end
             end
@@ -1263,8 +1260,6 @@ function Library:CreateWindow(Title, Settings)
                 local Callback = Settings.Callback or function(...) end;
                 local validKeys = Settings.Valid or nil;
                 local Flag = Settings.Flag;
-
-                Callback()
 
                 local KeybindFrame = Library:Create("Frame", {
                     Parent = SectionFrame,
