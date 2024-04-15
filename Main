@@ -155,6 +155,8 @@ do -- LOAD KEY RECORDER
         InputRecord = UserInputService.InputBegan:Connect(function(input, isTyping)
             if isTyping and input.KeyCode ~= Enum.KeyCode.Unknown then return; end;
 
+            print("key press")
+
             if input.KeyCode == Enum.KeyCode.Backspace then
                 InputRecord:Disconnect();
                 callback(nil);
