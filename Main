@@ -87,6 +87,7 @@ function Library:LoadSettings()
 
     for i, v in next, (Library.FlagInstances) do
         v:Load();
+        print(tostring(i));
     end;
 end;
 
