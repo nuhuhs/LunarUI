@@ -951,7 +951,10 @@ function Library:CreateWindow(Title, Settings)
 
                     Update();
                     SaveFlag();
-                    Callback(Toggle.Value);
+
+                    task.spawn(function()
+                        Callback(Toggle.Value);
+                    end);
                 end;
 
                 function Toggle:Fire()
@@ -1127,7 +1130,10 @@ function Library:CreateWindow(Title, Settings)
 
                     Update();
                     SaveFlag();
-                    Callback(Slider.Value);
+
+                    task.spawn(function()
+                        Callback(Slider.Value);
+                    end);
                 end;
 
                 function Slider:Load()
@@ -1248,7 +1254,10 @@ function Library:CreateWindow(Title, Settings)
                     end;
 
                     SaveFlag();
-                    Callback(string.sub(InputBox.Text, 1, CharLimit));
+
+                    task.spawn(function()
+                        Callback(string.sub(InputBox.Text, 1, CharLimit));
+                    end);
                 end;
 
                 InputBox.FocusLost:Connect(function()
@@ -1654,7 +1663,9 @@ function Library:CreateWindow(Title, Settings)
 
                     Library:Save();
 
-                    Callback(Current);
+                    task.spawn(function()
+                        Callback(Current);
+                    end);
                 end;
 
                 function Dropdown:SetOptions(newOptions)
