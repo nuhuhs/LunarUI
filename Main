@@ -452,6 +452,12 @@ function Library:CreateWindow(Title, Settings)
     local ScreenUI = Library:Create("ScreenGui", { Parent = CoreGui, ZIndexBehavior = Enum.ZIndexBehavior.Global });
     Library.ScreenUI = ScreenUI;
 
+    local SpawnPos = UDim2.new(0.5, 0, 0.5, 0);
+
+    if NotCenter then
+        UDim2.new(0.25, 0, 0.25, 0)
+    end;
+
     local WindowFrame = Library:Create("ImageLabel", {
         Parent = ScreenUI,
         AnchorPoint = Vector2.new(0.5, 0.5),
@@ -459,7 +465,7 @@ function Library:CreateWindow(Title, Settings)
         BackgroundTransparency = 1,
         BorderColor3 = Color3.new(0, 0, 0),
         BorderSizePixel = 0,
-        Position = (not NotCenter and UDim2.new(0.5, 0, 0.5, 0)) or (not NotCenter and UDim2.new(0.25, 0, 0.25, 0)),
+        Position = SpawnPos,
         Size = UDim2.new(0.5, 0, 0.5, 0),
         ZIndex = 99,
         Image = "http://www.roblox.com/asset/?id=16873490686"
