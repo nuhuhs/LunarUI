@@ -1,5 +1,7 @@
 -- https://raw.githubusercontent.com/nuhuhs/LunarUI
 
+repeat wait() until game:IsLoaded();
+
 -- LunarUI
 
 local players = game:GetService("Players");
