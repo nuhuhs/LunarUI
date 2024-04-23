@@ -1130,6 +1130,7 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 function Slider:Load()
+                    print(Library.Flags[Flag]);
                     Slider:SetValue(Library.Flags[Flag] or Slider.Default);
                 end;
 
