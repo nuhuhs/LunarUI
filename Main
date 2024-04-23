@@ -989,14 +989,14 @@ function Library:CreateWindow(Title, Settings)
                     Min = Settings.Min or 0
                 };
 
-                if Flag then
-                    Library.FlagInstances[Flag] = Slider;
-                end;
-
                 local Snap = Settings.Snap or .01;
                 local Flag = Settings.Flag or nil;
                 local Text = Settings.Text or "Slider";
                 local LayoutOrder = Settings.LayoutOrder or 0;
+
+                if Flag then
+                    Library.FlagInstances[Flag] = Slider;
+                end;
 
                 local SliderFrame = Library:Create("Frame", {
                     Parent = SectionFrame,
