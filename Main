@@ -86,7 +86,6 @@ function Library:LoadSettings()
     runfile(SavePath);
 
     for i, v in next, (Library.FlagInstances) do
-        print(i)
         v:Load();
     end;
 end;
@@ -845,6 +844,10 @@ function Library:CreateWindow(Title, Settings)
                 local LayoutOrder = Settings.LayoutOrder or 0;
                 local Flag = Settings.Flag or nil;
 
+                if Flag then
+                    Library.FlagInstances[Flag] = Toggle;
+                end;
+
                 local ToggleFrame = Library:Create("Frame", {
                     Parent = SectionFrame,
                     BackgroundColor3 = Color3.new(0, 0, 0),
@@ -915,15 +918,17 @@ function Library:CreateWindow(Title, Settings)
                 local Callback = Settings.Callback or function(...) end;
                 local Idx = TableLength(Library.Toggles) + 1;
 
-                local function Update()
-                    Library.Toggles[Idx] = Toggle;
-                    ToggleLabel.Text = Text;
-
+                local function SaveFlag()
                     if Flag then
                         Library.Flags[Flag] = Toggle.Value;
                     end;
 
                     Library:Save();
+                end;
+
+                local function Update()
+                    Library.Toggles[Idx] = Toggle;
+                    ToggleLabel.Text = Text;
 
                     if Toggle.Value then
                         local tween = TweenService:Create(ToggleSlider, TweenInfo.new(.2),
@@ -940,27 +945,20 @@ function Library:CreateWindow(Title, Settings)
                     end
                 end;
 
-                function Toggle:Fire()
-                    Toggle.Value = not Toggle.Value;
-
-                    Update();
-                    Callback(Toggle.Value);
-                end;
-
                 function Toggle:SetValue(Value)
                     Toggle.Value = Value or false;
 
                     Update();
+                    SaveFlag();
                     Callback(Toggle.Value);
                 end;
 
-                if Flag then
-                    Library.FlagInstances[Flag] = Toggle;
+                function Toggle:Fire()
+                    Toggle:SetValue(not Toggle.Value);
                 end;
 
                 function Toggle:Load()
                     Toggle:SetValue(Library.Flags[Flag] or Toggle.Default);
-                    Update();
                 end;
 
                 function Toggle:SetText(nText)
@@ -969,8 +967,7 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 function Toggle:Destroy()
-                    Toggle.Value = Value or false;
-                    Callback(Toggle.Value);
+                    Toggle:SetValue(false);
 
                     task.wait();
 
@@ -991,6 +988,10 @@ function Library:CreateWindow(Title, Settings)
                     Max = Settings.Max or 100,
                     Min = Settings.Min or 0
                 };
+
+                if Flag then
+                    Library.FlagInstances[Flag] = Slider;
+                end;
 
                 local Snap = Settings.Snap or .01;
                 local Flag = Settings.Flag or nil;
@@ -1098,12 +1099,17 @@ function Library:CreateWindow(Title, Settings)
 
                 local Callback = Settings.Callback or function(...) end;
 
-                local function Update(noFlag)
+                local function SaveFlag()
+                    if Flag then
+                        Library.Flags[Flag] = Slider.Value;
+                    end;
+
+                    Library:Save();
+                end;
+
+                local function Update()
                     local percent = math.clamp((Slider.Value - Slider.Min) / (Slider.Max - Slider.Min), 0, 1);
-                    Slider.Value = math.clamp(Slider.Value, Slider.Min, Slider.Max);
-
                     SliderTextBox.Text = math.floor(Slider.Value);
-
                     TweenService:Create(SliderInside, TweenInfo.new(.05), { Size = UDim2.new(percent, 0, 1, 0) }):Play();
 
                     if percent <= 0 then
@@ -1111,28 +1117,20 @@ function Library:CreateWindow(Title, Settings)
                     else
                         SliderInside.Visible = true;
                     end
+                end;
 
-                    if Flag and not noFlag then
-                        Library.Flags[Flag] = Slider.Value;
-                        Library:Save();
-                    end;
+                function Slider:SetValue(Value)
+                    if typeof(Value) ~= "number" then return; end;
 
+                    Slider.Value = math.clamp(Value, Slider.Min, Slider.Max) or 0;
+
+                    Update();
+                    SaveFlag();
                     Callback(Slider.Value);
                 end;
 
-                function Slider:SetValue(Value, noFlag)
-                    Slider.Value = math.clamp(Value, Slider.Min, Slider.Max) or 0;
-
-                    Update(noFlag);
-                end;
-
-                if Flag then
-                    Library.FlagInstances[Flag] = Slider;
-                end;
-
                 function Slider:Load()
-                    print("Slider:"..Library.Flags[Flag]);
-                    Slider:SetValue(Library.Flags[Flag] or Slider.Default, true);
+                    Slider:SetValue(Library.Flags[Flag] or Slider.Default);
                 end;
 
                 function Slider:SetMax(Value)
@@ -1150,7 +1148,7 @@ function Library:CreateWindow(Title, Settings)
                     Update();
                 end;
 
-                Update(true);
+                Update();
 
                 SliderClick.MouseButton1Down:Connect(function()
                     while UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) do
@@ -1160,8 +1158,8 @@ function Library:CreateWindow(Title, Settings)
                         local percent = math.clamp((((MousePos - FramePos) / Snap + .5) * Snap) / FrameSize, 0, 1);
                         local min, max = Slider.Min or 0, Slider.Max or 100;
 
-                        Slider.Value = math.clamp(((max - min) * percent) + min, min, max);
-                        Update();
+                        Slider:SetValue(math.clamp(((max - min) * percent) + min, min, max));
+
                         RunService.Heartbeat:Wait();
                     end;
                 end);
@@ -1181,8 +1179,13 @@ function Library:CreateWindow(Title, Settings)
                 local LayoutOrder = Settings.LayoutOrder or 0;
 
                 local Callback = Settings.Callback or function(...) end;
-                local CharLimit = Settings.CharLimit or 24;
+                local CharLimit = Settings.CharLimit or 9999999;
                 local Flag = Settings.Flag or nil;
+                local DefaultText = Settings.Prompt or "Input Here..."
+
+                if Flag then
+                    Library.FlagInstances[Flag] = Input;
+                end;
 
                 local InputFrame = Library:Create("Frame",
                     { Parent = SectionFrame, Size = UDim2.new(1, 0, 0, 25), LayoutOrder = LayoutOrder });
@@ -1211,10 +1214,11 @@ function Library:CreateWindow(Title, Settings)
                     Size = UDim2.new(.25, 0, 1, 0),
                     ZIndex = 110,
                     Font = Library.Font,
-                    Text = "Input Here...",
+                    Text = DefaultText or "Input Here...",
                     TextColor3 = Color3.new(0.705882, 0.705882, 0.705882),
                     TextSize = 14,
-                    TextXAlignment = Enum.TextXAlignment.Right
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                    ClipsDescendants = true
                 });
 
                 Library.ApplyUIPadding(InputFrame);
@@ -1223,33 +1227,32 @@ function Library:CreateWindow(Title, Settings)
                 Library:Register(InputBox, { TextColor3 = "TextColor" });
                 Library:Register(InputLabel, { TextColor3 = "TextColor" });
 
-                InputBox.FocusLost:Connect(function()
-                    InputBox.Text = string.sub(InputBox.Text, 1, CharLimit);
-
-                    if InputBox.Text == "" then
-                        InputBox.Text = "Input Here..."
-                    end;
-
-                    Callback(string.sub(InputBox.Text, 1, CharLimit));
-
+                local function SaveFlag()
                     if Flag then
                         Library.Flags[Flag] = InputBox.Text;
                     end;
-                end);
 
-                function Input:SetInput(Value)
-                    InputBox.Text = string.sub(Value, 1, CharLimit) or "";
-                    Callback(string.sub(InputBox.Text, 1, CharLimit));
-
-                    if Flag then
-                        Library.Flags[Flag] = InputBox.Text;
-                    end;
                     Library:Save();
                 end;
 
-                if Flag then
-                    Library.FlagInstances[Flag] = Input;
+                function Input:SetInput(Value)
+                    InputBox.Text = string.sub(tostring(Value), 1, CharLimit) or "";
+
+                    if InputBox.Text == "" then
+                        InputBox.Text = "Input Here..."
+                        InputBox.TextTransparency = .6;
+                    else
+                        InputBox.TextTransparency = 0;
+                    end;
+
+                    SaveFlag();
+                    Callback(string.sub(InputBox.Text, 1, CharLimit));
                 end;
+
+                InputBox.FocusLost:Connect(function()
+                    Input:SetInput(InputBox.Text);
+                end);
+
 
                 function Input:Load()
                     Input:SetInput(Library.Flags[Flag] or Text);
@@ -1267,6 +1270,10 @@ function Library:CreateWindow(Title, Settings)
                 local Callback = Settings.Callback or function(...) end;
                 local validKeys = Settings.Valid or nil;
                 local Flag = Settings.Flag;
+
+                if Flag then
+                    Library.FlagInstances[Flag] = Keybind;
+                end;
 
                 local KeybindFrame = Library:Create("Frame", {
                     Parent = SectionFrame,
@@ -1352,32 +1359,34 @@ function Library:CreateWindow(Title, Settings)
                 Library:Register(KeybindLabel, { TextColor3 = "TextColor" });
 
                 local recorder;
-                function Keybind:SetKey(key, noFlag)
+                local function SetupRecorder()
                     if recorder then
                         recorder:Disconnect();
                         recorder = nil;
                     end;
 
+                    local key = Keybind.Value;
+
+                    KeybindKey.Text = tostring(key);
+
                     if key and Enum.KeyCode[key] then
                         recorder = Library.RecordPress("KeyCode", { key }, Callback);
-                        Keybind.Value = key;
-                        KeybindKey.Text = Keybind.Value;
-                        if Flag and not noFlag then
-                            Library.Flags[Flag] = tostring(Keybind.Value);
-                            Library:Save();
-                        end;
-                    else
-                        Keybind.Value = key;
-                        KeybindKey.Text = tostring(Keybind.Value);
-                        if Flag and not noFlag then
-                            Library.Flags[Flag] = tostring(Keybind.Value);
-                            Library:Save();
-                        end;
                     end;
                 end;
 
-                if Flag then
-                    Library.FlagInstances[Flag] = Keybind;
+                local function SaveFlag()
+                    if Flag then
+                        Library.Flags[Flag] = tostring(Keybind.Value);
+                    end;
+
+                    Library:Save();
+                end;
+
+                function Keybind:SetKey(key)
+                    Keybind.Value = key;
+
+                    SetupRecorder();
+                    SaveFlag();
                 end;
 
                 function Keybind:Load()
@@ -1392,7 +1401,7 @@ function Library:CreateWindow(Title, Settings)
                     KeybindKey.Text = "..."
                 end);
 
-                Keybind:SetKey(Keybind.Default, true);
+                SetupRecorder();
 
                 return Keybind;
             end;
@@ -1412,6 +1421,10 @@ function Library:CreateWindow(Title, Settings)
                 local Default = Settings.Default or nil;
                 local Current = Default or nil;
                 local Flag = Settings.Flag;
+
+                if Flag then
+                    Library.FlagInstances[Flag] = Dropdown;
+                end;
 
                 if not Multi then
                     if typeof(Default) == "table" then
@@ -1647,8 +1660,6 @@ function Library:CreateWindow(Title, Settings)
 
                     Options['Options'] = newOptions;
                     Update();
-
-                    return;
                 end;
 
                 function Dropdown:SetValue(val)
@@ -1669,10 +1680,6 @@ function Library:CreateWindow(Title, Settings)
                         end;
                         Update();
                     end;
-                end;
-
-                if Flag then
-                    Library.FlagInstances[Flag] = Dropdown;
                 end;
 
                 function Dropdown:Load()
