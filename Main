@@ -84,6 +84,8 @@ function Library:LoadSettings()
     local SavePath = Library.Folder .. Library.SecondaryFolder .. Library.SavePath;
     local ThemePath = Library.Folder .. Library.SecondaryFolder .. Library.ThemePath;
 
+    if (not isfile) or not isfile(SavePath) then return; end;
+
     print(readfile(SavePath));
     runfile(SavePath);
 
