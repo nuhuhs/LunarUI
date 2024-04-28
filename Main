@@ -1634,6 +1634,7 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 Update = function()
+                    local OldPos = Dropdown.CanvasPosition;
                     for i, v in next, (Options['Instances']) do
                         if not table.find(Options['Options'], v) then
                             Options['Instances'][i]:Destroy();
@@ -1644,6 +1645,8 @@ function Library:CreateWindow(Title, Settings)
                     for i, v in next, (Options['Options']) do
                         Dropdown:AddItem(v);
                     end;
+
+                    Dropdown.CanvasPosition = OldPos;
 
                     local currentText = "nil";
                     if typeof(Current) == 'table' then
@@ -1661,7 +1664,7 @@ function Library:CreateWindow(Title, Settings)
                     OptionSelected.Text = tostring(currentText);
 
                     if Flag then
-                        Library.Flags[Flag] = Current;
+                        Library.Flags[Flag] = "{" .. table.concat(Current, ", ") .. "}";
                     end;
 
                     Library:Save();
