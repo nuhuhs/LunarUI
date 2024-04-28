@@ -2,12 +2,6 @@
 
 repeat wait() until game:IsLoaded();
 
-if Library then
-    pcall(function()
-        Library:Unload();
-    end);
-end;
-
 -- LunarUI
 
 local players = game:GetService("Players");
@@ -111,7 +105,6 @@ function Library:Unload()
     end;
 
     Library.ScreenUI:Destroy();
-    Library = nil;
 
     return;
 end
