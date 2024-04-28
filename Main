@@ -766,20 +766,12 @@ function Library:CreateWindow(Title, Settings)
 
                 local DividerOutside = Library:Create("Frame", {
                     Parent = SectionFrame,
-                    BackgroundTransparency = 0,
+                    BackgroundTransparency = 1,
                     BorderSizePixel = 0,
                     Size = UDim2.new(1, 0, 0, Size),
                     ZIndex = 105,
                     LayoutOrder = LayoutOrder
                 });
-
-
-
-                Library:Create("UICorner", { Parent = DividerOutside, CornerRadius = UDim.new(0, 4), });
-                local DividerStroke = Library.ApplyUIStroke(DividerOutside, "Round");
-                Library.ApplyUIPadding(DividerOutside);
-                Library:Register(DividerOutside, { BackgroundColor3 = "Background2" });
-                Library:Register(DividerStroke, { Color = "Accent2" });
 
                 local function Update()
                     DividerOutside.Size = UDim2.new(1, 0, 0, Size);
