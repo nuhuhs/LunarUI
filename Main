@@ -1664,7 +1664,7 @@ function Library:CreateWindow(Title, Settings)
                     OptionSelected.Text = tostring(currentText);
 
                     if Flag then
-                        local Concated = ((typeof(Current) == "table") and "{" .. table.concat(Current, ", ") .. "}") or Current;
+                        local Concated = ((typeof(Current) == "table") and table.concat(Current, ", ")) or Current;
                         Library.Flags[Flag] = Concated;
                     end;
 
@@ -1703,7 +1703,13 @@ function Library:CreateWindow(Title, Settings)
                 end;
 
                 function Dropdown:Load()
-                    Dropdown:SetValue(Library.Flags[Flag] or Default);
+                    local data = Library.Flags[Flag];
+
+                    if typeof(data) == 'string' then
+                        data = string.gsub(data, ", ", "");
+
+                        Dropdown:SetValue(data or Default);
+                    end;  
                 end;
 
                 Update();
