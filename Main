@@ -1664,7 +1664,7 @@ function Library:CreateWindow(Title, Settings)
                     OptionSelected.Text = tostring(currentText);
 
                     if Flag then
-                        local Concated = ((typeof(Current) == "table") and "{"..table.concat(Current.."}", ", ")) or Current;
+                        local Concated = ((typeof(Current) == "table") and "{"..table.concat(Current, ", ")).."}" or Current;
                         Library.Flags[Flag] = Current;
                     end;
 
