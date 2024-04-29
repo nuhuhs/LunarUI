@@ -1650,13 +1650,7 @@ function Library:CreateWindow(Title, Settings)
 
                     local currentText = "nil";
                     if typeof(Current) == 'table' then
-                        for i, v in next, (Current) do
-                            if i == 1 then
-                                currentText = v;
-                            else
-                                currentText = currentText .. ", " .. v;
-                            end
-                        end
+                        currentText = table.concat(Current, ", ")
                     else
                         currentText = tostring(Current);
                     end
@@ -1664,7 +1658,16 @@ function Library:CreateWindow(Title, Settings)
                     OptionSelected.Text = tostring(currentText);
 
                     if Flag then
-                        local Concated = ((typeof(Current) == "table") and table.concat(Current, ", ")) or Current;
+                        local Concated = "";
+
+                        if typeof(Options['Options']) == "table" then
+                            for i, v in next,(Options['Options']) do
+                                Concated = Concated.."'"..tostring(v).."', ";
+                            end;
+                        else
+                            Concated = Current;
+                        end;
+
                         Library.Flags[Flag] = Concated;
                     end;
 
@@ -1709,7 +1712,7 @@ function Library:CreateWindow(Title, Settings)
                         data = string.gsub(data, ", ", "");
 
                         Dropdown:SetValue(data or Default);
-                    end;  
+                    end;
                 end;
 
                 Update();
