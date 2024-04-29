@@ -1665,7 +1665,7 @@ function Library:CreateWindow(Title, Settings)
 
                     if Flag then
                         local Concated = ((typeof(Current) == "table") and "{"..table.concat(Current, ", ")).."}" or Current;
-                        Library.Flags[Flag] = Current;
+                        Library.Flags[Flag] = Concated;
                     end;
 
                     Library:Save();
